@@ -6,54 +6,74 @@
     <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui-1.8.6.custom.css" />
 </head>
 <body>
-    <form id="controls">
-        <table>
-            <tr>
-                <td><label for="cellsize">Cell Size (pixels)</label></td>
-                <td><input id="cellsize" name="cellsize" type="text"
-                    value="30" /></td>
-            </tr>
-            <tr>
-                <td><label for="boardwidth">Width (cells)</label></td>
-                <td><input id="boardwidth" name="boardwidth" type="text"
-                    value="20" /></td>
-            </tr>
-            <tr>
-                <td><label for="boardheight">Height (cells)</label></td>
-                <td><input id="boardheight" name="boardheight" type="text"
-                    value="20" /></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="sliderbox">
-                        <label for="speeddisplay">Speed (fps)</label>
-                        <span id="speeddisplay" name="speeddisplay"
-                            class="ui-slider-display"></span>
-                        <div id="speedslider"></div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="sliderbox">
-                        <label for="saturationdisplay">Saturation</label>
-                        <span id="saturationdisplay" name="saturationdisplay"
-                            class="ui-slider-display">0.3</span>
-                        <div id="saturationslider"></div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="buttonbar">
-                        <button type="button" id="randomize">Randomize</button>
-                        <button type="button" id="startstop">Start</button>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </form>
-    <canvas id="board"></canvas>
+    <div id="wrap">
+        <div id="main">
+            <form id="controls">
+                <table>
+                    <tr>
+                        <td><label for="cellsize">Cell Size (pixels)</label></td>
+                        <td><input id="cellsize" name="cellsize" type="text"
+                            value="30" /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="boardwidth">Width (cells)</label></td>
+                        <td><input id="boardwidth" name="boardwidth" type="text"
+                            value="20" /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="boardheight">Height (cells)</label></td>
+                        <td><input id="boardheight" name="boardheight" type="text"
+                            value="20" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="sliderbox">
+                                <label for="speeddisplay">Speed (fps)</label>
+                                <span id="speeddisplay" name="speeddisplay"
+                                    class="ui-slider-display"></span>
+                                <div id="speedslider"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="sliderbox">
+                                <label for="saturationdisplay">Saturation</label>
+                                <span id="saturationdisplay" name="saturationdisplay"
+                                    class="ui-slider-display">0.3</span>
+                                <div id="saturationslider"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="buttonbar">
+                                <button type="button" id="randomize">Randomize</button>
+                                <button type="button" id="startstop">Start</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <canvas id="board"></canvas>
+        </div>
+    </div>
+    <div id="footer">
+        <div class="left">
+            <p>
+                <a target="_blank" href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">
+                    What is a Conway's Life Simulation?
+                </a>
+            </p>
+            <p>
+                <a target="_blank" href="https://github.com/darthmall/Conway-s-Life">Get the source</a>
+            </p>
+        </div>
+        <div class="right">
+            &copy; 2010
+            <a href="mailto:wallace.sheehan@gmail.com?subject=Conway's Life">W. Evan Sheehan</a>
+        </div>
+    </div>
     <script src="js/jquery-1.4.2.min.js"></script>
     <script src="js/jquery-ui-1.8.6.custom.min.js"></script>
     <script src="js/conway.js"></script>

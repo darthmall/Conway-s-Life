@@ -1,10 +1,7 @@
-html {
+html, body{
     font-family: sans-serif;
     color: #404040;
-}
-
-body {
-    padding: 8px;
+    height: 100%;
 }
 
 input[type="text"] {
@@ -29,6 +26,16 @@ form table input {
     width: 100%;
 }
 
+#wrap {
+    min-height: 100%;
+}
+
+#main {
+    overflow: auto;
+    padding-top: 12px;
+    padding-bottom: 170px;
+}
+
 #controls {
     width: 360px;
     float: left;
@@ -37,6 +44,44 @@ form table input {
 #board {
     border: 1px solid #888888;
     margin-left: 36px;
+}
+
+#footer {
+    position: relative;
+    height: 150px;
+    margin-top: -150px;
+    clear: both;
+    font-size: .8em;
+    border-top: 1px solid #888888;
+    background-color: #CCCCCC;
+}
+
+#footer p {
+    margin-bottom: .8em;
+}
+
+#footer div {
+    padding: 36px 18px 18px 18px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#footer .left {
+    float: left;
+}
+
+#footer .right {
+    text-align: right;
+    float: right;
+}
+
+#footer a {
+    text-decoration: none;
+    color: #ff0000;
+}
+
+#footer a:visited {
+    color: #ff0000;
 }
 
 .ui-slider-display {
