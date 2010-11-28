@@ -1,0 +1,40 @@
+html {
+    font-family: sans-serif;
+    color: #404040;
+}
+
+body {
+    padding: 8px;
+}
+
+input[type="text"] {
+    border: 1px solid #888888;
+    border-radius: 8px;
+    padding: 0.5em;
+    font-size: 1em;
+}
+
+form table {
+    width: 100%;
+    margin: 18px;
+    border-collapse: separate;
+    border-spacing: 6px 10px;
+}
+
+form table tr {
+    margin-bottom: 8px;
+}
+
+form table input {
+    width: 100%;
+}
+
+#controls {
+    width: 360px;
+    float: left;
+}
+
+#board {
+    border: 1px solid #888888;
+    margin-left: 36px
+}

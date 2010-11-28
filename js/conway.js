@@ -11,7 +11,7 @@ function Board(canvas, cellsize, height, width) {
         ctx.strokeStyle = '#888888';
         ctx.beginPath();
 
-        for (var i = -0.5; i < canvas.attr('width'); i += cellsize) {
+        for (var i = -0.5; i < canvas.attr('width') - 0.5; i += cellsize) {
             ctx.moveTo(i, 0);
             ctx.lineTo(i, canvas.height());
             ctx.moveTo(0, i);
@@ -66,7 +66,7 @@ function Board(canvas, cellsize, height, width) {
         ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
     }
 
-    function run() {
+    function run(speed) {
         var nextState = [];
         for (var i = 0; i < width * height; i++) {
             var x = i % width;
@@ -77,7 +77,9 @@ function Board(canvas, cellsize, height, width) {
         }
 
         cells = nextState;
-        timer = setTimeout(run, 1000);
+        timer = setTimeout(function() {
+            run(speed)
+        }, 1000 / speed);
     }
 
     function stop() {
@@ -134,6 +136,7 @@ function Board(canvas, cellsize, height, width) {
 }
 
 $(document).ready(function() {
+    var speed = 300;
     var board = new Board($('#board'),
                           parseInt($('#cellsize').val()),
                           parseInt($('#boardwidth').val()),
@@ -151,13 +154,24 @@ $(document).ready(function() {
         board.setHeight(parseInt($(this).val()));
     });
 
-    $('#startstop').click(function() {
+    $('#speedslider').slider({
+        range: 'min',
+        value: speed,
+        min: 1,
+        max: 1000,
+        slide: function(event, ui) {
+            $('#speeddisplay').attr('innerHTML', ui.value);
+            speed = ui.value;
+        }
+    });
+
+    $('#startstop').button().click(function() {
         if (board.running()) {
             this.innerHTML = 'Start';
             board.stop();
         } else {
             this.innerHTML = 'Stop';
-            board.run();
+            board.run(speed);
         }
     });
 });
