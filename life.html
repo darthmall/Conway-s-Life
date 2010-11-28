@@ -1,0 +1,34 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="reset.css" />
+    <link rel="stylesheet" type="text/css" href="conway.css" />
+    <script src="jquery.js"></script>
+    <script src="conway.js"></script>
+</head>
+<body>
+    <form id="controls">
+        <table>
+            <tr>
+                <td><label for="cellsize">Cell Size:</label></td>
+                <td><input id="cellsize" name="cellsize" type="text"
+                    value="30" /></td>
+            </tr>
+            <tr>
+                <td><label for="boardwidth">Width:</label></td>
+                <td><input id="boardwidth" name="boardwidth" type="text"
+                    value="20" /></td>
+            </tr>
+            <tr>
+                <td><label for="boardheight">Height:</label></td>
+                <td><input id="boardheight" name="boardheight" type="text"
+                    value="20" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button id="startstop">Start</button></td>
+            </tr>
+        </table>
+    </form>
+    <canvas id="board" />
+</body>
+</html>

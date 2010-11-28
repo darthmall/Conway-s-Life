@@ -1,0 +1,11 @@
+html {
+    font-family: sans-serif;
+}
+
+#controls {
+    width: 360px;
+    float: left;
+}
+
+#board {
+}
