@@ -3,7 +3,7 @@
 function Board(canvas, cellsize, height, width) {
 
     var ctx = canvas.get(0).getContext('2d');
-    var live = new SortedArray();
+    var cells = [];
 
     function draw() {
         ctx.lineSize = 1;
@@ -21,18 +21,17 @@ function Board(canvas, cellsize, height, width) {
         ctx.closePath();
     }
 
+    function reset() {
+        cells = [];
+        for (var i = 0; i < width * height; i++) {
+            cells[i] = false;
+        }
+    }
+
     function toggle(x, y) {
         var index = y * width + x;
 
-        if (live.contains(index)) {
-            live.remove(index);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
-        } else {
-            live.insert(index);
-            ctx.fillStyle = '#ff0000';
-            ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
-        }
+        setCellState(x, y, !cells[index], cells);
     }
 
     function resize() {
@@ -40,6 +39,51 @@ function Board(canvas, cellsize, height, width) {
             width: cellsize * width,
             height: cellsize * height
         });
+    }
+
+    function liveNeighbors(x, y) {
+        var count = 0;
+        var minX = Math.max(x - 1, 0);
+        var maxX = Math.min(x + 1, width - 1);
+        var minY = Math.max(y - 1, 0);
+        var maxY = Math.min(y + 1, height - 1);
+
+        for (var i = minX; i <= maxX; i++) {
+            for (var j = minY; j <= maxY; j++) {
+                if (i !== x || j !== y) {
+                    count += (cells[j * width + i]) ? 1 : 0;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    function setCellState(x, y, alive, cellData) {
+        cellData[y * width + x] = alive;
+        ctx.fillStyle = alive ? '#ff0000' : '#ffffff';
+        ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
+    }
+
+    function run() {
+        var nextState = [];
+        for (var i = 0; i < width * height; i++) {
+            var x = i % width;
+            var y = Math.floor(i / width);
+            var a = alive(x, y);
+
+            setCellState(x, y, a, nextState);
+        }
+
+        cells = nextState;
+        setTimeout(run, 1000);
+    }
+
+    function alive(x, y) {
+        var live_neighbors = liveNeighbors(x, y);
+
+        return ((cells[y * width + x] && live_neighbors >= 2 && live_neighbors
+                 <= 3) || (!cells[y * width + x] && live_neighbors === 3))
     }
 
     function setCellSize(value) {
@@ -50,81 +94,31 @@ function Board(canvas, cellsize, height, width) {
 
     function setWidth(value) {
         width = value;
+        reset();
         resize();
         draw();
     }
 
     function setHeight(value) {
         height = value;
+        reset();
         resize();
         draw();
     }
 
+
     this.setCellSize = setCellSize;
     this.setWidth = setWidth;
     this.setHeight = setHeight;
+    this.run = run;
 
     canvas.click(function(e) {
         toggle(Math.floor(e.offsetX / cellsize), Math.floor(e.offsetY / cellsize));
     });
 
+    reset();
     resize();
     draw();
-}
-
-function SortedArray() {
-
-    var data = [];
-
-    function search(value) {
-        var lower;
-        var upper;
-        var mid;
-
-        if (arguments.length < 2) {
-            return search(value, 0, data.length - 1);
-        }
-
-        lower = arguments[1];
-        upper = arguments[2];
-
-        if (lower > upper) {
-            return -1
-        }
-
-        mid = Math.ceil((upper + lower) / 2);
-
-        if (data[mid] === value) {
-            return mid;
-        }
-
-        return (data[mid] < value) ? search(value, mid + 1, upper) :
-            search(value, lower, mid - 1);
-    }
-
-    function insert(value) {
-        data.push(value);
-        data.sort(function(a, b) {
-            return a - b;
-        });
-    }
-
-    function remove(value) {
-        var index = search(value);
-
-        if (index > -1) {
-            data.splice(index, 1);
-        }
-    }
-
-    function contains(value) {
-        var index = search(value);
-        return (index > -1);
-    }
-
-    this.insert = insert;
-    this.remove = remove;
-    this.contains = contains;
 }
 
 $(document).ready(function() {
@@ -143,6 +137,10 @@ $(document).ready(function() {
 
     $('#boardheight').change(function() {
         board.setHeight(parseInt($(this).val()));
+    });
+
+    $('#startstop').click(function() {
+        board.run();
     });
 });
 
