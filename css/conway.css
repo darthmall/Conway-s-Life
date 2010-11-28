@@ -13,13 +13,9 @@ input[type="text"] {
 
 form table {
     width: 100%;
-    margin: 18px;
+    margin: -12px 18px 0 18px;
     border-collapse: separate;
     border-spacing: 6px 10px;
-}
-
-form table tr {
-    margin-bottom: 8px;
 }
 
 form table input {
@@ -30,10 +26,16 @@ form table input {
     min-height: 100%;
 }
 
+#header {
+    background-color:#ccc;
+    border-bottom: 1px solid #888;
+    padding: 32px 0 16px 396px;
+    font-size: 3em;
+}
 #main {
     overflow: auto;
     padding-top: 12px;
-    padding-bottom: 170px;
+    padding-bottom: 120px;
 }
 
 #controls {
@@ -48,8 +50,8 @@ form table input {
 
 #footer {
     position: relative;
-    height: 150px;
-    margin-top: -150px;
+    height: 100px;
+    margin-top: -100px;
     clear: both;
     font-size: .8em;
     border-top: 1px solid #888888;
@@ -61,7 +63,7 @@ form table input {
 }
 
 #footer div {
-    padding: 36px 18px 18px 18px;
+    padding: 24px 18px 18px 18px;
     display: inline-block;
     vertical-align: top;
 }
