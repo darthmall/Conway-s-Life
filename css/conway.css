@@ -36,5 +36,17 @@ form table input {
 
 #board {
     border: 1px solid #888888;
-    margin-left: 36px
+    margin-left: 36px;
+}
+
+.ui-slider-display {
+    float: right;
+}
+
+.ui-slider {
+    margin: 8px 0;
+}
+
+.buttonbar {
+    text-align: right;
 }

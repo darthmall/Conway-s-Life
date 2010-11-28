@@ -1,5 +1,6 @@
 <html>
 <head>
+    <title>Conway's Life Simulation</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css" />
     <link rel="stylesheet" type="text/css" href="css/conway.css" />
     <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui-1.8.6.custom.css" />
@@ -26,7 +27,8 @@
                 <td colspan="2">
                     <div class="sliderbox">
                         <label for="speeddisplay">Speed</label>
-                        <span id="speeddisplay" name="speed">300</span>
+                        <span id="speeddisplay" name="speeddisplay"
+                            class="ui-slider-display">300</span>
                         <div id="speedslider"></div>
                     </div>
                 </td>
@@ -35,15 +37,16 @@
                 <td colspan="2">
                     <div class="sliderbox">
                         <label for="saturationdisplay">Saturation</label>
-                        <span id="saturationdisplay" name="saturationdisplay">0.3</span>
+                        <span id="saturationdisplay" name="saturationdisplay"
+                            class="ui-slider-display">0.3</span>
                         <div id="saturationslider"></div>
-                        <button type="button" id="randomize">Randomize</button>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <div class="buttonbar">
+                        <button type="button" id="randomize">Randomize</button>
                         <button type="button" id="startstop">Start</button>
                     </div>
                 </td>
