@@ -1,6 +1,6 @@
 (function() {
 
-function Board(canvas, cellsize, height, width) {
+function Board(canvas, cellsize, height, width, speed) {
 
     var ctx = canvas.get(0).getContext('2d');
     var cells = [];
@@ -66,7 +66,7 @@ function Board(canvas, cellsize, height, width) {
         ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
     }
 
-    function run(speed) {
+    function run() {
         var nextState = [];
         for (var i = 0; i < width * height; i++) {
             var x = i % width;
@@ -77,9 +77,7 @@ function Board(canvas, cellsize, height, width) {
         }
 
         cells = nextState;
-        timer = setTimeout(function() {
-            run(speed)
-        }, 1000 / speed);
+        timer = setTimeout(run, 1000 / speed);
     }
 
     function stop() {
@@ -114,6 +112,10 @@ function Board(canvas, cellsize, height, width) {
         draw();
     }
 
+    function setSpeed(value) {
+        speed = value;
+    }
+
     function randomize(saturation) {
         for (var i = 0; i < width; i++) {
             for (var j = 0; j < height; j++) {
@@ -130,6 +132,7 @@ function Board(canvas, cellsize, height, width) {
     this.setCellSize = setCellSize;
     this.setWidth = setWidth;
     this.setHeight = setHeight;
+    this.setSpeed = setSpeed;
     this.run = run;
     this.stop = stop;
     this.randomize = randomize;
@@ -145,12 +148,13 @@ function Board(canvas, cellsize, height, width) {
 }
 
 $(document).ready(function() {
-    var speed = 300;
     var saturation = 0.3;
+    var initial_speed = 10
     var board = new Board($('#board'),
                           parseInt($('#cellsize').val()),
                           parseInt($('#boardwidth').val()),
-                          parseInt($('#boardheight').val()));
+                          parseInt($('#boardheight').val()),
+                          initial_speed);
 
     $('#cellsize').change(function() {
         board.setCellSize(parseInt($(this).val()));
@@ -166,14 +170,17 @@ $(document).ready(function() {
 
     $('#speedslider').slider({
         range: 'min',
-        value: speed,
-        min: 1,
-        max: 1000,
+        value: initial_speed,
+        min: 0.5,
+        max: 60,
+        step: 0.5,
         slide: function(event, ui) {
             $('#speeddisplay').attr('innerHTML', ui.value);
-            speed = ui.value;
+            board.setSpeed(ui.value);
         }
     });
+
+    $('#speeddisplay').attr('innerHTML', initial_speed);
 
     $('#saturationslider').slider({
         range: 'min',
@@ -197,7 +204,7 @@ $(document).ready(function() {
             board.stop();
         } else {
             $(this).children('.ui-button-text').attr('innerHTML', 'Stop');
-            board.run(speed);
+            board.run();
         }
     });
 
