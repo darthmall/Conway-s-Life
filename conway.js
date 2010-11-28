@@ -4,6 +4,7 @@ function Board(canvas, cellsize, height, width) {
 
     var ctx = canvas.get(0).getContext('2d');
     var cells = [];
+    var timer = null;
 
     function draw() {
         ctx.lineSize = 1;
@@ -76,7 +77,12 @@ function Board(canvas, cellsize, height, width) {
         }
 
         cells = nextState;
-        setTimeout(run, 1000);
+        timer = setTimeout(run, 1000);
+    }
+
+    function stop() {
+        clearTimeout(timer);
+        timer = null;
     }
 
     function alive(x, y) {
@@ -106,11 +112,17 @@ function Board(canvas, cellsize, height, width) {
         draw();
     }
 
+    function running() {
+        return (timer !== null);
+    }
+
 
     this.setCellSize = setCellSize;
     this.setWidth = setWidth;
     this.setHeight = setHeight;
     this.run = run;
+    this.stop = stop;
+    this.running = running;
 
     canvas.click(function(e) {
         toggle(Math.floor(e.offsetX / cellsize), Math.floor(e.offsetY / cellsize));
@@ -140,7 +152,13 @@ $(document).ready(function() {
     });
 
     $('#startstop').click(function() {
-        board.run();
+        if (board.running()) {
+            this.innerHTML = 'Start';
+            board.stop();
+        } else {
+            this.innerHTML = 'Stop';
+            board.run();
+        }
     });
 });
 
