@@ -114,6 +114,14 @@ function Board(canvas, cellsize, height, width) {
         draw();
     }
 
+    function randomize(saturation) {
+        for (var i = 0; i < width; i++) {
+            for (var j = 0; j < height; j++) {
+                setCellState(i, j, (Math.random() <= saturation), cells);
+            }
+        }
+    }
+
     function running() {
         return (timer !== null);
     }
@@ -124,6 +132,7 @@ function Board(canvas, cellsize, height, width) {
     this.setHeight = setHeight;
     this.run = run;
     this.stop = stop;
+    this.randomize = randomize;
     this.running = running;
 
     canvas.click(function(e) {
@@ -137,6 +146,7 @@ function Board(canvas, cellsize, height, width) {
 
 $(document).ready(function() {
     var speed = 300;
+    var saturation = 0.3;
     var board = new Board($('#board'),
                           parseInt($('#cellsize').val()),
                           parseInt($('#boardwidth').val()),
@@ -165,15 +175,32 @@ $(document).ready(function() {
         }
     });
 
+    $('#saturationslider').slider({
+        range: 'min',
+        value: saturation,
+        min: 0.01,
+        max: 1,
+        step: 0.01,
+        slide: function(event, ui) {
+            $('#saturationdisplay').attr('innerHTML', ui.value);
+            saturation = ui.value;
+        }
+    });
+
+    $('#randomize').button().click(function() {
+        board.randomize(saturation);
+    });
+
     $('#startstop').button().click(function() {
         if (board.running()) {
-            this.innerHTML = 'Start';
+            $(this).children('.ui-button-text').attr('innerHTML', 'Start');
             board.stop();
         } else {
-            this.innerHTML = 'Stop';
+            $(this).children('.ui-button-text').attr('innerHTML', 'Stop');
             board.run(speed);
         }
     });
+
 });
 
 })();

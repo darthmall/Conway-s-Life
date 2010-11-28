@@ -24,16 +24,29 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <label for="speeddisplay">Speed</label>
-                    <span id="speeddisplay" name="speed">300</span>
+                    <div class="sliderbox">
+                        <label for="speeddisplay">Speed</label>
+                        <span id="speeddisplay" name="speed">300</span>
+                        <div id="speedslider"></div>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td colspan="2"><div id="speedslider"></div></td>
+                <td colspan="2">
+                    <div class="sliderbox">
+                        <label for="saturationdisplay">Saturation</label>
+                        <span id="saturationdisplay" name="saturationdisplay">0.3</span>
+                        <div id="saturationslider"></div>
+                        <button type="button" id="randomize">Randomize</button>
+                    </div>
+                </td>
             </tr>
             <tr>
-                <td></td>
-                <td><button type="button" id="startstop">Start</button></td>
+                <td colspan="2">
+                    <div class="buttonbar">
+                        <button type="button" id="startstop">Start</button>
+                    </div>
+                </td>
             </tr>
         </table>
     </form>
