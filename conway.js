@@ -1,5 +1,9 @@
 (function() {
+
 function Board(canvas, cellsize, height, width) {
+
+    var ctx = canvas.get(0).getContext('2d');
+    var live = new SortedArray();
 
     function draw() {
         ctx.lineSize = 1;
@@ -23,30 +27,36 @@ function Board(canvas, cellsize, height, width) {
         if (live.contains(index)) {
             live.remove(index);
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(x * cellsize, y * cellsize, cellsize, cellsize);
+            ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
         } else {
             live.insert(index);
             ctx.fillStyle = '#ff0000';
-            ctx.fillRect(x * cellsize, y * cellsize, cellsize, cellsize);
+            ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
         }
+    }
+
+    function resize() {
+        canvas.attr({
+            width: cellsize * width,
+            height: cellsize * height
+        });
     }
 
     function setCellSize(value) {
         cellsize = value;
-        canvas.attr('width', cellsize * width);
-        canvas.attr('height', cellsize * height);
+        resize()
         draw();
     }
 
     function setWidth(value) {
         width = value;
-        canvas.attr('width', cellsize * value);
+        resize();
         draw();
     }
 
     function setHeight(value) {
         height = value;
-        canvas.attr('height', cellsize * value);
+        resize();
         draw();
     }
 
@@ -58,15 +68,13 @@ function Board(canvas, cellsize, height, width) {
         toggle(Math.floor(e.offsetX / cellsize), Math.floor(e.offsetY / cellsize));
     });
 
-    var ctx = canvas.get(0).getContext('2d');
-    var live = new SortedArray();
-
-    canvas.attr('width', cellsize * width);
-    canvas.attr('height', cellsize * height);
+    resize();
     draw();
 }
 
 function SortedArray() {
+
+    var data = [];
 
     function search(value) {
         var lower;
@@ -74,43 +82,49 @@ function SortedArray() {
         var mid;
 
         if (arguments.length < 2) {
-            return search(value, 0, cells.length - 1);
+            return search(value, 0, data.length - 1);
         }
 
         lower = arguments[1];
         upper = arguments[2];
 
         if (lower > upper) {
-            return;
+            return -1
         }
 
         mid = Math.ceil((upper + lower) / 2);
 
-        if (cells[mid] === value) {
+        if (data[mid] === value) {
             return mid;
         }
 
-        return (cells[mid] < value) ? search(value, lower, mid - 1) :
-            search(value, mid + 1, upper);
+        return (data[mid] < value) ? search(value, mid + 1, upper) :
+            search(value, lower, mid - 1);
     }
 
     function insert(value) {
-        cells.splice(search(value), 0, value);
+        data.push(value);
+        data.sort(function(a, b) {
+            return a - b;
+        });
     }
 
     function remove(value) {
-        cells.splice(search(value), 1);
+        var index = search(value);
+
+        if (index > -1) {
+            data.splice(index, 1);
+        }
     }
 
     function contains(value) {
-        return (cells[search(value)] === value);
+        var index = search(value);
+        return (index > -1);
     }
 
     this.insert = insert;
     this.remove = remove;
     this.contains = contains;
-
-    var cells = [];
 }
 
 $(document).ready(function() {
