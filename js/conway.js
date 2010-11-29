@@ -219,6 +219,16 @@ $(document).ready(function() {
         }
     });
 
+    $('#showrules').click(function() {
+        $('#rules').css({
+            left: ($(window).width() - $('#rules').width()) / 2,
+            top: ($(window).height() - $('#rules').height()) / 2
+        }).show();
+    });
+
+    $('#rules').click(function() {
+        $(this).hide();
+    });
 });
 
 })();

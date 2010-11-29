@@ -22,6 +22,10 @@ form table input {
     width: 100%;
 }
 
+a {
+    cursor: pointer;
+}
+
 #wrap {
     min-height: 100%;
 }
@@ -63,7 +67,7 @@ form table input {
 }
 
 #footer div {
-    padding: 24px 18px 18px 18px;
+    padding: 12px 18px 0 18px;
     display: inline-block;
     vertical-align: top;
 }
@@ -84,6 +88,35 @@ form table input {
 
 #footer a:visited {
     color: #ff0000;
+}
+
+#rules {
+    cursor: pointer;
+    background-color: #fff;
+    padding: 18px;
+    display: none;
+    position: absolute;
+    width: 480px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    box-shadow: 4px 4px 5px #666;
+    -moz-box-shadow: 4px 4px 5px #666;
+    -webkit-box-shadow: 4px 4px 5px #666;
+}
+
+ol {
+    counter-reset: rule -1;
+    list-style-position: outside;
+    margin-bottom: -8px;
+}
+
+ol li:before {
+    content: "0" counter(rule) "_";
+    counter-increment: rule;
+}
+
+ol li {
+    margin-bottom: 8px;
 }
 
 .ui-slider-display {
