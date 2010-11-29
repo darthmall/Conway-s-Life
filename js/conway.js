@@ -128,6 +128,14 @@ function Board(canvas, cellsize, height, width, speed) {
         return (timer !== null);
     }
 
+    function clear() {
+        for (var i = 0; i < width; i++) {
+            for (var j = 0; j < height; j++) {
+                setCellState(i, j, false, cells);
+            }
+        }
+    }
+
 
     this.setCellSize = setCellSize;
     this.setWidth = setWidth;
@@ -137,6 +145,7 @@ function Board(canvas, cellsize, height, width, speed) {
     this.stop = stop;
     this.randomize = randomize;
     this.running = running;
+    this.clear = clear;
 
     canvas.click(function(e) {
         toggle(Math.floor(e.offsetX / cellsize), Math.floor(e.offsetY / cellsize));
@@ -193,6 +202,8 @@ $(document).ready(function() {
             saturation = ui.value;
         }
     });
+
+    $('#clear').button().click(board.clear);
 
     $('#randomize').button().click(function() {
         board.randomize(saturation);
