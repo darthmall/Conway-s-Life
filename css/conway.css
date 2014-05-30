@@ -99,9 +99,9 @@ a {
     width: 480px;
     border: 1px solid #888;
     border-radius: 5px;
-    box-shadow: 4px 4px 5px #666;
     -moz-box-shadow: 4px 4px 5px #666;
     -webkit-box-shadow: 4px 4px 5px #666;
+    box-shadow: 4px 4px 5px #666;
 }
 
 ol {

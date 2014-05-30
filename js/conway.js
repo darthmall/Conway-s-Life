@@ -1,11 +1,22 @@
 (function() {
 
+/**
+ * Board class is used to maintain game state and draw the board.
+ *
+ * @constructor
+ */
 function Board(canvas, cellsize, height, width, speed) {
 
+    // Private variables
     var ctx = canvas.get(0).getContext('2d');
     var cells = [];
     var timer = null;
 
+    /**
+     * Draw the grid on the board.
+     *
+     * @access private
+     */
     function draw() {
         ctx.lineSize = 1;
         ctx.strokeStyle = '#888888';
@@ -22,6 +33,11 @@ function Board(canvas, cellsize, height, width, speed) {
         ctx.closePath();
     }
 
+    /**
+     * Resets all cells to 0 (dead).
+     *
+     * @access public
+     */
     function reset() {
         cells = [];
         for (var i = 0; i < width * height; i++) {
@@ -29,12 +45,23 @@ function Board(canvas, cellsize, height, width, speed) {
         }
     }
 
+    /**
+     * Toggle the state of the cell at coordinates x,y.
+     *
+     * If the cell is alive, make it dead, and vice versa.
+     * @access public
+     */
     function toggle(x, y) {
         var index = y * width + x;
 
         setCellState(x, y, !cells[index], cells);
     }
 
+    /**
+     * Trigger resizing of the canvas based on cellsize, height, and width.
+     *
+     * @access public
+     */
     function resize() {
         canvas.attr({
             width: cellsize * width,
@@ -42,6 +69,19 @@ function Board(canvas, cellsize, height, width, speed) {
         });
     }
 
+    /**
+     * Returns the number of neighbors for a given cell that are alive.
+     *
+     * Neighbors are the eight cells that surround a given cell. The board
+     * wraps, so a cell in the top row of the board has three neighbors on the
+     * bottom row and vice versa. The same applies to the sides.
+     *
+     * @param x The x-coordinate (column number) of the cell
+     * @param y The y-coordinate (row number) of the cell
+     * @return The number of cells surrounding the cell at (x, y) that are 
+     *         alive.
+     * @access private
+     */
     function liveNeighbors(x, y) {
         var count = 0;
         var minX = Math.max(x - 1, 0);
@@ -60,12 +100,27 @@ function Board(canvas, cellsize, height, width, speed) {
         return count;
     }
 
+    /**
+     * Sets the state of the cell to the value of `alive` and draws the cell.
+     *
+     * @param x The x-coordinate (column number) of the cell to update
+     * @param y The y-coordinate (row number) of the cell to update
+     * @param alive The state to set for the cell (`true` or `false`)
+     * @param cellData An array containing the cell states on the board
+     *
+     * @access private
+     */
     function setCellState(x, y, alive, cellData) {
         cellData[y * width + x] = alive;
         ctx.fillStyle = alive ? '#ff0000' : '#ffffff';
         ctx.fillRect(x * cellsize, y * cellsize, cellsize - 1, cellsize - 1);
     }
 
+    /**
+     * Starts the game.
+     *
+     * @access public
+     */
     function run() {
         var nextState = [];
         for (var i = 0; i < width * height; i++) {
@@ -80,24 +135,56 @@ function Board(canvas, cellsize, height, width, speed) {
         timer = setTimeout(run, 1000 / speed);
     }
 
+    /**
+     * Stops the game.
+     *
+     * @access public
+     */
     function stop() {
         clearTimeout(timer);
         timer = null;
     }
 
+    /**
+     * Returns `true` if the cell at (x, y) should be alie, `false` otherwise.
+     *
+     * Calculates the next the state of a cell given its current state and the
+     * states of all eight of its neighbors
+     *
+     * @param x The x-coordinate (column number) of the cell
+     * @param y The y-coordinate (row number) of the cell
+     *
+     * @access private
+     */
     function alive(x, y) {
         var live_neighbors = liveNeighbors(x, y);
 
-        return ((cells[y * width + x] && live_neighbors >= 2 && live_neighbors
-                 <= 3) || (!cells[y * width + x] && live_neighbors === 3))
+        return ((cells[y * width + x] && live_neighbors >= 2 &&
+            live_neighbors <= 3) || (!cells[y * width + x] &&
+            live_neighbors === 3));
     }
 
+    /**
+     * Sets the cellSize property
+     *
+     * @param value An integer value indicating the height and width of each
+     *              cell on the board.
+     *
+     * @access public
+     */
     function setCellSize(value) {
         cellsize = value;
-        resize()
+        resize();
         draw();
     }
 
+    /**
+     * Sets the width of the board in cells.
+     *
+     * @param value The number of columns on the board
+     *
+     * @access public
+     */
     function setWidth(value) {
         width = value;
         reset();
@@ -105,6 +192,13 @@ function Board(canvas, cellsize, height, width, speed) {
         draw();
     }
 
+    /**
+     * Sets the height of the board in cells.
+     *
+     * @param value The number of rows on the board
+     *
+     * @access public
+     */
     function setHeight(value) {
         height = value;
         reset();
@@ -112,10 +206,29 @@ function Board(canvas, cellsize, height, width, speed) {
         draw();
     }
 
+    /**
+     * Sets the number of seconds between iterations of the game.
+     *
+     * @param value The number of seconds between each iteration of the game
+     *
+     * @access public
+     */
     function setSpeed(value) {
         speed = value;
     }
 
+    /**
+     * Randomly sets cell states to alive or dead.
+     *
+     * `saturation` can be considered a probability that a given cell is alive.
+     * For example, if `saturation` is 0.3, approximately 30% of the cells on
+     * the board will be alive.
+     *
+     * @param saturation A number in the range [0, 1] that sets the percentage
+     *                   of cells on the board that will be alive
+     *
+     * @access public
+     */
     function randomize(saturation) {
         for (var i = 0; i < width; i++) {
             for (var j = 0; j < height; j++) {
@@ -124,10 +237,20 @@ function Board(canvas, cellsize, height, width, speed) {
         }
     }
 
+    /**
+     * Returns `true` if the game is running, `false` otherwise.
+     *
+     * @access public
+     */
     function running() {
         return (timer !== null);
     }
 
+    /**
+     * Sets all cell states to dead (`false`).
+     *
+     * @access public
+     */
     function clear() {
         for (var i = 0; i < width; i++) {
             for (var j = 0; j < height; j++) {
@@ -136,7 +259,7 @@ function Board(canvas, cellsize, height, width, speed) {
         }
     }
 
-
+    // Public method declarations
     this.setCellSize = setCellSize;
     this.setWidth = setWidth;
     this.setHeight = setHeight;
@@ -147,34 +270,38 @@ function Board(canvas, cellsize, height, width, speed) {
     this.running = running;
     this.clear = clear;
 
+    // Toggle cell states when a user clicks the canvas.
     canvas.click(function(e) {
         toggle(Math.floor(e.offsetX / cellsize), Math.floor(e.offsetY / cellsize));
     });
 
+    // Initialize the board.
     reset();
     resize();
     draw();
 }
 
 $(document).ready(function() {
+    // Set up defaults
     var saturation = 0.3;
-    var initial_speed = 10
+    var initial_speed = 10;
     var board = new Board($('#board'),
-                          parseInt($('#cellsize').val()),
-                          parseInt($('#boardwidth').val()),
-                          parseInt($('#boardheight').val()),
+                          parseInt($('#cellsize').val(), 10),
+                          parseInt($('#boardwidth').val(), 10),
+                          parseInt($('#boardheight').val(), 10),
                           initial_speed);
 
+    // Initialize game controls
     $('#cellsize').change(function() {
-        board.setCellSize(parseInt($(this).val()));
+        board.setCellSize(parseInt($(this).val(), 10));
     });
 
     $('#boardwidth').change(function() {
-        board.setWidth(parseInt($(this).val()));
+        board.setWidth(parseInt($(this).val(), 10));
     });
 
     $('#boardheight').change(function() {
-        board.setHeight(parseInt($(this).val()));
+        board.setHeight(parseInt($(this).val(), 10));
     });
 
     $('#speedslider').slider({
@@ -219,6 +346,9 @@ $(document).ready(function() {
         }
     });
 
+    // End game controls
+
+    // Initialize the rules display
     $('#showrules').click(function() {
         $('#rules').css({
             left: ($(window).width() - $('#rules').width()) / 2,
